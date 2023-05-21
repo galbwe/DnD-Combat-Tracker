@@ -1,4 +1,3 @@
-from operator import attrgetter
 import os
 
 longestCreatureName = 8
@@ -50,17 +49,17 @@ class NPC(Creature):
         return self.name
 
     def addTempHp(self):
-        numTempHp = input('  temp hp: ')
+        numTempHp = int(input('  temp hp: '))
         self.tempHp += numTempHp
 
     def heal(self):
-        numHeal = input('  heal: ')
+        numHeal = int(input('  heal: '))
         self.curHp += numHeal
         if(self.curHp > self.maxHp):
             self.curHp = self.maxHp
                 
     def hit(self):
-        numDmg = input('  damage: ')
+        numDmg = int(input('  damage: '))
         if (self.tempHp > numDmg):
             self.tempHp -= numDmg
         elif (self.tempHp < numDmg):
@@ -74,8 +73,8 @@ class NPC(Creature):
         return False
 
     def addStatus(self):
-        newStat = raw_input('  status name: ')
-        duration = raw_input('  duration: ')
+        newStat = int(input('  status name: '))
+        duration = int(input('  duration: '))
         if (duration != '-'):
             try:
                 duration = int(duration)
@@ -88,9 +87,9 @@ class NPC(Creature):
             longestStatusName = len(newStat)
 
     def removeStatus(self):
-        toRemove = raw_input('  to remove: ')
+        toRemove = int(input('  to remove: '))
         while (toRemove not in self.status):
-            toRemove = raw_input('  invalid status, try again: ')
+            toRemove = int(input('  invalid status, try again: '))
             if (toRemove == 'cancel'):
                 return
         del self.status[toRemove]
@@ -108,20 +107,20 @@ def getCreatures():
     creatures = []
     isPc = ''
     while (isPc != 'done'):
-        isPc = raw_input('PC, NPC, or done? ')
+        isPc = input('PC, NPC, or done? ')
         if (isPc == 'PC' or isPc == 'pc' or isPc == 'p'):
-            playerName = raw_input('  PC name: ')
+            playerName = input('  PC name: ')
             while (isCreature(creatures, playerName)):
-                playerName = raw_input('  Invalid name. Try again: ')
-            playerInitiative = input('  PC initiative: ')
+                playerName = input('  Invalid name. Try again: ')
+            playerInitiative = int(input('  PC initiative: '))
             creatures.append(PC(playerName, playerInitiative))
         elif (isPc == 'NPC' or isPc == 'npc' or isPc == 'n'):
-            name = raw_input('  NPC name: ')
+            name = input('  NPC name: ')
             while (isCreature(creatures, name)):
-                playerName = raw_input('  Invalid name. Try again: ')
-            health = input('  NPC HP: ')
-            ac = input('  NPC AC: ')
-            initiative = input('  NPC initiative: ')
+                playerName = input('  Invalid name. Try again: ')
+            health = int(input('  NPC HP: '))
+            ac = int(input('  NPC AC: '))
+            initiative = int(input('  NPC initiative: '))
             creatures.append(NPC(name, health, ac, initiative))
         elif (isPc != 'done'):
             print('Invalid input. Try again.')
@@ -240,10 +239,10 @@ def findCreature(creatures, toFind):
     return None
 
 def getTarget(creatures):
-    targetString = raw_input('  target: ')
+    targetString = input('  target: ')
     targetCreature = findCreature(creatures, targetString)
     while (targetCreature == None):
-        targetString = raw_input('  invalid target, try again: ')
+        targetString = input('  invalid target, try again: ')
         targetCreature = findCreature(creatures, targetString)
     return targetCreature
 
@@ -255,7 +254,7 @@ def runCombat(creatures):
     toKill = []
     while (action != 'end' and action != 'done'):
         message = ''
-        action = raw_input('action: ')
+        action = input('action: ')
         if (action == 'next turn' or action == 'next' or action == 'n'):
             for dead in toKill:
                 message += 'Killed ' + dead.name + '\n'
@@ -322,7 +321,7 @@ def runCombat(creatures):
 
         elif (action == 'rename'):
             targetCreature = getTarget(creatures)
-            newName = raw_input('New name: ')
+            newName = input('New name: ')
             targetCreature.rename(newName)
         
         printTable(creatures, curCreature, message)
